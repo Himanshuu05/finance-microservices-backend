@@ -1,0 +1,49 @@
+# ========================
+# Spring Boot / Java
+# ========================
+target/
+*.log
+*.class
+*.jar
+*.war
+
+# ========================
+# IntelliJ
+# ========================
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# ========================
+# VS Code
+# ========================
+.vscode/
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Environment / Secrets
+# ========================
+.env
+application.properties
+application.yml
+
+# ========================
+# Maven Wrapper
+# ========================
+!.mvn/wrapper/maven-wrapper.jar
+
+# ========================
+# Node (future frontend)
+# ========================
+node_modules/
+
+# ========================
+# Database
+# ========================
+*.db

@@ -1,0 +1,982 @@
+{
+  "info": {
+    "_postman_id": "e79add3f-3641-4d98-8b82-da1463898324",
+    "name": "Finance Backend Api Documentation",
+    "description": "# 💰 Finance Backend API Documentation\n\n## 📌 Overview\n\nThis collection contains APIs for a **microservices-based finance backend system** built using Spring Boot.\n\nThe system supports:\n\n- User management with roles (ADMIN, ANALYST, VIEWER)\n    \n- Financial records CRUD operations\n    \n- Filtering of financial data\n    \n- Dashboard analytics (summary, category-wise, trends)\n    \n- Role-based access control\n    \n- Input validation and error handling\n    \n\n---\n\n## 🧠 Architecture\n\nThe backend follows a **microservices architecture**:\n\n- **User Service** → Manages users and roles\n    \n- **Finance Service** → Handles financial records\n    \n- **Dashboard Service** → Provides aggregated analytics\n    \n- **Eureka Server** → Service discovery\n    \n- **OpenFeign** → Inter-service communication\n    \n\n---\n\n## 🔐 Authorization\n\nRole-based access control is implemented using request headers.\n\n### Required Header:\n\n```\nrole: ADMIN | ANALYST | VIEWER\n\n ```\n\n### Permissions:\n\n- **ADMIN** → Full access (CRUD operations)\n    \n- **ANALYST** → Read + analytics\n    \n- **VIEWER** → Read-only access\n    \n\n---\n\n## 📡 Available APIs\n\n### 🔹 Finance Service\n\n- Create record → `POST /records/create`\n    \n- Get records → `GET /records`\n    \n- Update record → `PUT /records/{id}`\n    \n- Delete record → `DELETE /records/{id}`\n    \n- Filter records → `GET /records/filter`\n    \n\n---\n\n### 🔹 Dashboard Service\n\n- Summary → `GET /dashboard/summary`\n    \n- Category-wise → `GET /dashboard/category`\n    \n- Recent activity → `GET /dashboard/recent`\n    \n- Monthly trends → `GET /dashboard/monthly`\n    \n\n---\n\n## 🧪 Sample Data\n\nUse the following JSON to test:\n\n``` json\n{\n  \"amount\": 5000,\n  \"type\": \"INCOME\",\n  \"category\": \"Salary\",\n  \"date\": \"2026-04-03\",\n  \"description\": \"Monthly salary\",\n  \"userId\": 1\n}\n\n ```\n\n---\n\n## ⚠️ Error Handling\n\nThe system returns structured error responses:\n\n``` json\n{\n  \"error\": \"Validation failed\",\n  \"status\": 400\n}\n\n ```\n\n---\n\n## 🗄️ Data Persistence\n\n- PostgreSQL is used for storing data\n    \n- Each microservice maintains its own database\n    \n- Finance Service stores `userId` instead of full user object (microservices best practice)\n    \n\n---\n\n## 📌 Assumptions\n\n- Role is passed via request header (simplified authentication)\n    \n- Services are independently deployable\n    \n- No shared database between services\n    \n\n---\n\n## 🚀 How to Use\n\n1. Start all services\n    \n2. Add role header in requests\n    \n3. Use provided endpoints to test functionality\n    \n\n---\n\n## 🎯 Purpose\n\nThis collection demonstrates backend design, API structure, access control, validation, and microservices communication for a finance dashboard system.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42641318"
+  },
+  "item": [
+    {
+      "name": "Create Users",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"Sachin\",\r\n    \"email\": \"sachin@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"role\": \"ANALYST\",\r\n    \"status\": \"ACTIVE\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/users/create",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "users",
+            "create"
+          ]
+        },
+        "description": "Create Users , Assign their roles, Mark user status as active or inactive."
+      },
+      "response": [
+        {
+          "name": "Create Users",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Sachin\",\r\n    \"email\": \"sachin@gmail.com\",\r\n    \"password\": \"1234\",\r\n    \"role\": \"ANALYST\",\r\n    \"status\": \"ACTIVE\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/users/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "users",
+                "create"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 11:51:34 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 3,\n    \"name\": \"Sachin\",\n    \"email\": \"sachin@gmail.com\",\n    \"password\": \"1234\",\n    \"role\": \"ANALYST\",\n    \"status\": \"ACTIVE\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Fetch All Users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/users/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "users",
+            "all"
+          ]
+        },
+        "description": "Fetch all the users details."
+      },
+      "response": [
+        {
+          "name": "Fetch All Users",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/users/all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "users",
+                "all"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Pragma",
+              "value": "no-cache"
+            },
+            {
+              "key": "Expires",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:47:45 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Himu\",\n        \"email\": \"himu@gmail.com\",\n        \"password\": \"1234\",\n        \"role\": \"ADMIN\",\n        \"status\": \"ACTIVE\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Ayush\",\n        \"email\": \"ayush@gmail.com\",\n        \"password\": \"1234\",\n        \"role\": \"VIEWER\",\n        \"status\": \"ACTIVE\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Sachin\",\n        \"email\": \"sachin@gmail.com\",\n        \"password\": \"1234\",\n        \"role\": \"ANALYST\",\n        \"status\": \"ACTIVE\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Create Finance Records",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "role",
+            "value": "ADMIN",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amount\": 1500,\r\n    \"category\": \"Freelance\",\r\n    \"type\": \"INCOME\",\r\n    \"date\": \"2026-04-12\",\r\n    \"description\": \"Freelance project\",\r\n    \"userId\": 2\r\n\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8082/records/create",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "records",
+            "create"
+          ]
+        },
+        "description": "Create finance record."
+      },
+      "response": [
+        {
+          "name": "Create Finance Records",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "role",
+                "value": "ADMIN",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"amount\": 1500,\r\n    \"category\": \"Freelance\",\r\n    \"type\": \"INCOME\",\r\n    \"date\": \"2026-04-12\",\r\n    \"description\": \"Freelance project\",\r\n    \"userId\": 2\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/records/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "records",
+                "create"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "128"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 11:56:22 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"amount\": 1500,\n    \"category\": \"Freelance\",\n    \"date\": \"2026-04-12\",\n    \"description\": \"Freelance project\",\n    \"id\": 7,\n    \"type\": \"INCOME\",\n    \"userId\": 2\n}"
+        }
+      ]
+    },
+    {
+      "name": "Fetch All Finance Records",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "role",
+            "value": "ADMIN",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amount\": 1500,\r\n    \"category\": \"Freelance\",\r\n    \"type\": \"INCOME\",\r\n    \"date\": \"2026-04-12\",\r\n    \"description\": \"Freelance project\",\r\n    \"userId\": 2\r\n\r\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8082/records",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "records"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Fetch All Finance Records",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "role",
+                "value": "ADMIN",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"amount\": 1500,\r\n    \"category\": \"Freelance\",\r\n    \"type\": \"INCOME\",\r\n    \"date\": \"2026-04-12\",\r\n    \"description\": \"Freelance project\",\r\n    \"userId\": 2\r\n\r\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8082/records",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "records"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "867"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 11:57:40 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"amount\": 1200,\n        \"category\": \"Food\",\n        \"date\": \"2026-04-02\",\n        \"description\": \"Lunch and dinner\",\n        \"id\": 2,\n        \"type\": \"EXPENSE\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 3000,\n        \"category\": \"Shopping\",\n        \"date\": \"2026-04-01\",\n        \"description\": \"Clothes shopping\",\n        \"id\": 3,\n        \"type\": \"EXPENSE\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 2000,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 4,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 1,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 5,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": -100,\n        \"category\": null,\n        \"date\": null,\n        \"description\": null,\n        \"id\": 6,\n        \"type\": null,\n        \"userId\": null\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-04-12\",\n        \"description\": \"Freelance project\",\n        \"id\": 7,\n        \"type\": \"INCOME\",\n        \"userId\": 2\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Updating Record",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "role",
+            "value": "ADMIN",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"amount\": 1200,\r\n    \"category\": \"Youtube\",\r\n    \"date\": \"2026-04-09\",\r\n    \"description\": \"Youtube Earning\",\r\n    \"type\": \"INCOME\",\r\n    \"userId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8082/records/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "records",
+            "2"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Updating Record",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "role",
+                "value": "ADMIN",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"amount\": 1200,\r\n    \"category\": \"Youtube\",\r\n    \"date\": \"2026-04-09\",\r\n    \"description\": \"Youtube Earning\",\r\n    \"type\": \"INCOME\",\r\n    \"userId\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/records/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "records",
+                "2"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "124"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:00:34 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"amount\": 1200,\n    \"category\": \"Youtube\",\n    \"date\": \"2026-04-09\",\n    \"description\": \"Youtube Earning\",\n    \"id\": 2,\n    \"type\": \"INCOME\",\n    \"userId\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "Deleting Record",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "role",
+            "value": "ADMIN",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8082/records/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "records",
+            "2"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Deleting Record",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "role",
+                "value": "ADMIN",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8082/records/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "records",
+                "2"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "20"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:01:29 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Deleted successfully"
+        }
+      ]
+    },
+    {
+      "name": "Filtering by type, date, category",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "role",
+            "value": "ADMIN",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8082/records/filter?type=INCOME",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8082",
+          "path": [
+            "records",
+            "filter"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "INCOME"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Filtering by type, date, category",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "role",
+                "value": "ADMIN",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8082/records/filter?type=INCOME",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "records",
+                "filter"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "INCOME"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "517"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:04:31 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"amount\": 2000,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 4,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 1,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 5,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-04-12\",\n        \"description\": \"Freelance project\",\n        \"id\": 7,\n        \"type\": \"INCOME\",\n        \"userId\": 2\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Summary",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "role",
+            "value": "ANALYST",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8083/dashboard/summary",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8083",
+          "path": [
+            "dashboard",
+            "summary"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Dashboard Summary",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "role",
+                "value": "ANALYST",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/dashboard/summary",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "dashboard",
+                "summary"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "51"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:25:14 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"income\": 6500,\n    \"balance\": 3600,\n    \"expense\": 2900\n}"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Analysis by Category",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Role",
+            "value": "VIEWER",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8083/dashboard/category",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8083",
+          "path": [
+            "dashboard",
+            "category"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Dashboard Analysis by Category",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Role",
+                "value": "VIEWER",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/dashboard/category",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "dashboard",
+                "category"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "38"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:35:16 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"Freelance\": 6500,\n    \"Shopping\": 3000\n}"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Analysis By Recent Activity",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Role",
+            "value": "ANALYST",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8083/dashboard/recent",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8083",
+          "path": [
+            "dashboard",
+            "recent"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Dashboard Analysis By Recent Activity",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Role",
+                "value": "ANALYST",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/dashboard/recent",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "dashboard",
+                "recent"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "645"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:41:00 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-04-12\",\n        \"description\": \"Freelance project\",\n        \"id\": 7,\n        \"type\": \"INCOME\",\n        \"userId\": 2\n    },\n    {\n        \"amount\": 3000,\n        \"category\": \"Shopping\",\n        \"date\": \"2026-04-01\",\n        \"description\": \"Clothes shopping\",\n        \"id\": 3,\n        \"type\": \"EXPENSE\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 2000,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 4,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 1,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    },\n    {\n        \"amount\": 1500,\n        \"category\": \"Freelance\",\n        \"date\": \"2026-03-28\",\n        \"description\": \"Freelance project\",\n        \"id\": 5,\n        \"type\": \"INCOME\",\n        \"userId\": 1\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard Analysis By Monthly Trend",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "role",
+            "value": "ANALYST",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8083/dashboard/monthly",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8083",
+          "path": [
+            "dashboard",
+            "monthly"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Dashboard Analysis By Monthly Trend",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "role",
+                "value": "ANALYST",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8083/dashboard/monthly",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "dashboard",
+                "monthly"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "31"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 05 Apr 2026 12:44:55 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"MARCH\": 5000,\n    \"APRIL\": 4500\n}"
+        }
+      ]
+    }
+  ]
+}
